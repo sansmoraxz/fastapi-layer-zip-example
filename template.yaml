@@ -21,11 +21,24 @@ Resources:
           AWS_LAMBDA_EXEC_WRAPPER: /opt/bootstrap
           PORT: "8000"
       Layers:
-        - !Sub arn:aws:lambda:${AWS::Region}:753240598075:layer:LambdaAdapterLayerX86:20      
+        - !Sub arn:aws:lambda:${AWS::Region}:753240598075:layer:LambdaAdapterLayerX86:20
+        - !Ref FastAPILayer
       Events:
         ApiEvent:
           Type: HttpApi
- 
+  FastAPILayer:
+    Type: AWS::Serverless::LayerVersion
+    Metadata:
+      BuildMethod: makefile
+      BuildArchitecture: x86_64
+    Properties:
+      Description: FastAPI Layer
+      ContentUri: .
+      CompatibleArchitectures:
+        - x86_64
+      CompatibleRuntimes:
+        - python3.10
+      RetentionPolicy: Delete
 
 Outputs:
   FastAPIApi:
